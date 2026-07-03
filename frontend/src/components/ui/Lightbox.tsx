@@ -51,27 +51,25 @@ export function Lightbox({ items, index, onClose, onIndexChange }: Props) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/40 backdrop-blur-xl"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.3 }}
+      onClick={onClose}
     >
-      {/* Background close area */}
-      <div className="absolute inset-0 cursor-zoom-out" onClick={onClose} />
-
-      {/* Close button */}
+      {/* Close button - always clearly visible */}
       <button
         onClick={onClose}
-        className="absolute top-6 right-6 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 active:scale-90"
+        className="absolute top-4 right-4 md:top-6 md:right-6 z-[110] flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition hover:bg-white/30 active:scale-90"
         aria-label="Fermer"
       >
-        <X className="h-6 w-6" strokeWidth={1.5} />
+        <X className="h-5 w-5 md:h-6 md:w-6" strokeWidth={2} />
       </button>
 
       {/* Main Image Container */}
       <div 
-        className="relative z-10 flex flex-1 w-full max-w-[1400px] items-center justify-center p-4 md:p-12"
+        className="relative flex-1 w-full max-w-[1400px] overflow-hidden"
         onTouchStart={(e) => {
           const t = e.touches[0];
           touchStart.current = { x: t.clientX, y: t.clientY };
@@ -89,57 +87,66 @@ export function Lightbox({ items, index, onClose, onIndexChange }: Props) {
           if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
         }}
       >
-        <AnimatePresence custom={dir} mode="wait">
-          <motion.img
+        <AnimatePresence custom={dir} mode="popLayout" initial={false}>
+          <motion.div
             key={index}
             custom={dir}
             variants={variants}
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            src={item.src}
-            alt={item.title}
-            draggable={false}
-            className="max-h-[75vh] w-auto max-w-full rounded-xl object-contain shadow-2xl"
-          />
+            transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+            className="absolute inset-0 flex items-center justify-center p-4 md:p-16"
+          >
+            <img
+              src={item.src}
+              alt={item.title}
+              draggable={false}
+              onClick={(e) => e.stopPropagation()}
+              className="max-h-full max-w-full object-contain rounded-xl shadow-2xl"
+            />
+          </motion.div>
         </AnimatePresence>
 
         {/* Nav Buttons */}
         <button
           onClick={(e) => { e.stopPropagation(); go(-1); }}
-          className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 active:scale-90"
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-[110] flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition hover:bg-white/30 active:scale-90"
           aria-label="Précédent"
         >
-          <ChevronLeft className="h-6 w-6" strokeWidth={2} />
+          <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" strokeWidth={2} />
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); go(1); }}
-          className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 active:scale-90"
+          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-[110] flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition hover:bg-white/30 active:scale-90"
           aria-label="Suivant"
         >
-          <ChevronRight className="h-6 w-6" strokeWidth={2} />
+          <ChevronRight className="h-5 w-5 md:h-6 md:w-6" strokeWidth={2} />
         </button>
       </div>
 
       {/* Caption Bottom */}
-      <div className="relative z-10 w-full max-w-[800px] p-6 text-center text-white shrink-0">
-        <AnimatePresence mode="wait">
+      <div 
+        className="relative z-[110] w-full p-6 text-center text-white shrink-0 bg-gradient-to-t from-black/40 to-transparent"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
+            className="mx-auto max-w-[800px]"
           >
             {item.tag && (
-              <span className="mb-3 inline-block rounded-full border border-white/30 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white/90">
+              <span className="mb-3 inline-block rounded-full border border-white/40 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-white">
                 {item.tag}
               </span>
             )}
             <h2 className="font-serif text-2xl md:text-3xl font-medium tracking-wide">{item.title}</h2>
             {item.subtitle && <p className="mt-2 font-serif text-sm md:text-base italic text-white/80">{item.subtitle}</p>}
-            <p className="mx-auto mt-4 max-w-2xl text-sm md:text-base leading-relaxed text-white/90">{item.description}</p>
+            <p className="mt-3 text-sm md:text-base leading-relaxed text-white/90">{item.description}</p>
           </motion.div>
         </AnimatePresence>
       </div>
