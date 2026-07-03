@@ -10,7 +10,7 @@ type Props = {
   intervalMs?: number;
 };
 
-export function Carousel({ items, onOpen, intervalMs = 4000 }: Props) {
+export function Carousel({ items, onOpen, intervalMs = 2000 }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
