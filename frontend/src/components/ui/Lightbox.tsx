@@ -51,7 +51,7 @@ export function Lightbox({ items, index, onClose, onIndexChange }: Props) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-xl"
+      className="fixed inset-0 z-[100] flex flex-col bg-black/80 backdrop-blur-xl"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -67,69 +67,66 @@ export function Lightbox({ items, index, onClose, onIndexChange }: Props) {
         <X className="h-5 w-5 md:h-6 md:w-6" strokeWidth={2} />
       </button>
 
-      {/* Content Area (Image + Buttons) */}
+      {/* Image Section (flex-1 with min-h-0 prevents overflow bugs) */}
       <div 
-        className="absolute inset-0 flex flex-col p-4 md:p-16 pb-[180px] md:pb-[140px] pointer-events-none"
+        className="relative flex-1 w-full min-h-0 flex items-center justify-center p-4 md:p-12"
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={(e) => {
+          const t = e.touches[0];
+          touchStart.current = { x: t.clientX, y: t.clientY };
+        }}
+        onTouchEnd={(e) => {
+          if (!touchStart.current) return;
+          const t = e.changedTouches[0];
+          const dx = t.clientX - touchStart.current.x;
+          const dy = t.clientY - touchStart.current.y;
+          touchStart.current = null;
+          if (Math.abs(dy) > 100 && Math.abs(dy) > Math.abs(dx)) {
+            onClose();
+            return;
+          }
+          if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+        }}
       >
-        <div 
-          className="relative w-full h-full flex items-center justify-center pointer-events-auto"
-          onClick={(e) => e.stopPropagation()}
-          onTouchStart={(e) => {
-            const t = e.touches[0];
-            touchStart.current = { x: t.clientX, y: t.clientY };
-          }}
-          onTouchEnd={(e) => {
-            if (!touchStart.current) return;
-            const t = e.changedTouches[0];
-            const dx = t.clientX - touchStart.current.x;
-            const dy = t.clientY - touchStart.current.y;
-            touchStart.current = null;
-            if (Math.abs(dy) > 100 && Math.abs(dy) > Math.abs(dx)) {
-              onClose();
-              return;
-            }
-            if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
-          }}
-        >
-          <AnimatePresence custom={dir} mode="wait">
-            <motion.img
-              key={index}
-              custom={dir}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.25, ease: "easeInOut" }}
-              src={item.src}
-              alt={item.title}
-              draggable={false}
-              className="max-h-full max-w-full object-contain rounded-xl drop-shadow-2xl"
-            />
-          </AnimatePresence>
+        <AnimatePresence custom={dir} mode="wait">
+          <motion.img
+            key={index}
+            custom={dir}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            src={item.src}
+            alt={item.title}
+            draggable={false}
+            className="w-full h-full object-contain rounded-xl drop-shadow-2xl"
+          />
+        </AnimatePresence>
 
-          {/* Nav Buttons */}
-          <button
-            onClick={(e) => { e.stopPropagation(); go(-1); }}
-            className="absolute left-0 md:-left-8 top-1/2 -translate-y-1/2 z-[110] flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 active:scale-90"
-            aria-label="Précédent"
-          >
-            <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" strokeWidth={2} />
-          </button>
-          <button
-            onClick={(e) => { e.stopPropagation(); go(1); }}
-            className="absolute right-0 md:-right-8 top-1/2 -translate-y-1/2 z-[110] flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 active:scale-90"
-            aria-label="Suivant"
-          >
-            <ChevronRight className="h-6 w-6 md:h-8 md:w-8" strokeWidth={2} />
-          </button>
-        </div>
+        {/* Nav Buttons */}
+        <button
+          onClick={(e) => { e.stopPropagation(); go(-1); }}
+          className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-[110] flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 active:scale-90"
+          aria-label="Précédent"
+        >
+          <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" strokeWidth={2} />
+        </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); go(1); }}
+          className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-[110] flex h-10 w-10 md:h-14 md:w-14 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 active:scale-90"
+          aria-label="Suivant"
+        >
+          <ChevronRight className="h-6 w-6 md:h-8 md:w-8" strokeWidth={2} />
+        </button>
       </div>
 
-      {/* Caption Bottom */}
+      {/* Caption Section (shrink-0 stays at bottom) */}
       <div 
-        className="absolute bottom-0 inset-x-0 p-6 md:p-8 bg-gradient-to-t from-black/70 via-black/40 to-transparent flex justify-center pointer-events-none"
+        className="shrink-0 w-full p-6 md:p-8 pb-8 md:pb-12 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex justify-center"
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-full max-w-[800px] text-center pointer-events-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="w-full max-w-[800px] text-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={index}
