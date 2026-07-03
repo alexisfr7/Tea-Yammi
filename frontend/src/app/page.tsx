@@ -89,16 +89,50 @@ export default function HomePage() {
         <Carousel items={gallery} onOpen={() => {}} />
       </Reveal>
 
-      {/* Thumbnails / mosaïque */}
+      {/* Thumbnails / mosaïque : La carte */}
       <section className="mx-auto mt-14 max-w-[520px] md:max-w-4xl lg:max-w-6xl px-5">
-        <Reveal className="mb-4 flex items-baseline justify-between">
+        <Reveal className="mb-4">
           <h2 className="font-serif text-2xl md:text-3xl">La carte en images</h2>
-          <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-            {gallery.length} créations
-          </span>
         </Reveal>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
-          {gallery.map((g, i) => (
+          {gallery.slice(0, -3).map((g, i) => (
+            <motion.div
+              key={g.src + i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2, margin: "0px 0px -8% 0px" }}
+              transition={{
+                duration: 0.6,
+                delay: (i % 2) * 0.05 + Math.floor(i / 2) * 0.03,
+                ease: [0.22, 0.61, 0.36, 1],
+              }}
+              style={{ willChange: "transform, opacity" }}
+              className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-muted"
+            >
+              <img
+                src={g.src}
+                alt={g.title}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+              />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-cocoa/85 via-cocoa/20 to-transparent p-3">
+                <p className="line-clamp-1 text-left font-serif text-[13px] text-cream">
+                  {g.title}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* Thumbnails / mosaïque : L'établissement */}
+      <section className="mx-auto mt-14 max-w-[520px] md:max-w-4xl lg:max-w-6xl px-5">
+        <Reveal className="mb-4">
+          <h2 className="font-serif text-2xl md:text-3xl">Notre établissement</h2>
+        </Reveal>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 lg:gap-6">
+          {gallery.slice(-3).map((g, i) => (
             <motion.div
               key={g.src + i}
               initial={{ opacity: 0, y: 20 }}
