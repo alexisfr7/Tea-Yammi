@@ -102,13 +102,13 @@ export function Lightbox({ items, index, onClose, onIndexChange }: Props) {
             animate="center"
             exit="exit"
             transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
-            className="absolute inset-0 flex items-center justify-center px-5"
+            className="absolute inset-0 flex items-center justify-center p-6 md:p-12"
           >
             <img
               src={item.src}
               alt={item.title}
               draggable={false}
-              className="max-h-full max-w-full select-none rounded-2xl object-contain shadow-2xl"
+              className="max-h-[65vh] md:max-h-[60vh] max-w-full select-none rounded-2xl object-contain shadow-2xl"
             />
           </motion.div>
         </AnimatePresence>
