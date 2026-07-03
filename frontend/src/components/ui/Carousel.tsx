@@ -80,13 +80,13 @@ export function Carousel({ items, onOpen, intervalMs = 2000 }: Props) {
         <div 
           ref={scrollRef}
           onScroll={onScroll}
-          className="flex w-full overflow-x-auto snap-x snap-mandatory hide-scrollbar cursor-grab active:cursor-grabbing px-[10%] md:px-[25%] lg:px-[35%]"
+          className="flex w-full overflow-x-auto snap-x snap-mandatory hide-scrollbar cursor-grab active:cursor-grabbing px-[10%] md:px-[20%] lg:px-[30%]"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {items.map((item, i) => (
             <div 
               key={i} 
-              className="w-[80%] md:w-[50%] lg:w-[30%] shrink-0 snap-center relative aspect-[4/5] px-2 md:px-4 transition-transform duration-500"
+              className="w-[80%] md:w-[60%] lg:w-[40%] shrink-0 snap-center relative aspect-[4/5] px-2 md:px-4 transition-transform duration-500"
               style={{
                 transform: index === i ? 'scale(1)' : 'scale(0.9)',
                 opacity: index === i ? 1 : 0.6,
