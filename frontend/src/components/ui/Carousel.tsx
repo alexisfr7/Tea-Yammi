@@ -80,12 +80,9 @@ export function Carousel({ items, onOpen, intervalMs = 2000 }: Props) {
         <div 
           ref={scrollRef}
           onScroll={onScroll}
-          className="flex w-full overflow-x-auto snap-x snap-mandatory hide-scrollbar cursor-grab active:cursor-grabbing px-4 md:px-1/2"
+          className="flex w-full overflow-x-auto snap-x snap-mandatory hide-scrollbar cursor-grab active:cursor-grabbing px-[10%] md:px-[25%] lg:px-[35%]"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {/* Les paddings de scroll permettent au premier/dernier élément d'être centré */}
-          <div className="w-[10%] md:w-[25%] lg:w-[35%] shrink-0" />
-          
           {items.map((item, i) => (
             <div 
               key={i} 
@@ -118,8 +115,6 @@ export function Carousel({ items, onOpen, intervalMs = 2000 }: Props) {
               </div>
             </div>
           ))}
-          
-          <div className="w-[10%] md:w-[25%] lg:w-[35%] shrink-0" />
         </div>
 
         {/* Progress bar overlay */}
