@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 0.75rem;
+
+  /* Warm, editorial palette that harmonises with the food imagery */
+  --cocoa: oklch(0.28 0.04 55);        /* deep chocolate */
+  --cream: oklch(0.94 0.02 75);        /* warm cream */
+  --ivory: oklch(0.97 0.012 80);       /* page bg */
+  --tea:   oklch(0.55 0.09 145);       /* matcha green */
+  --gold:  oklch(0.72 0.13 75);        /* warm gold accent */
+
+  --background: var(--ivory);
+  --foreground: var(--cocoa);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--cocoa);
+  --primary: var(--cocoa);
+  --primary-foreground: var(--cream);
+  --secondary: var(--cream);
+  --secondary-foreground: var(--cocoa);
+  --muted: oklch(0.92 0.015 75);
+  --muted-foreground: oklch(0.45 0.03 55);
+  --accent: var(--gold);
+  --accent-foreground: var(--cocoa);
+  --border: oklch(0.88 0.02 70);
+  --ring: var(--gold);
+
+  --font-serif: "Cormorant Garamond", "Noto Serif SC", ui-serif, Georgia, serif;
+  --font-sans: "Inter", "Noto Serif SC", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    -webkit-tap-highlight-color: transparent;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+    transform: translateZ(0);
+  }
+  img {
+    -webkit-user-drag: none;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
