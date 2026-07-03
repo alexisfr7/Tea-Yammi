@@ -15,7 +15,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/40 bg-ivory/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[520px] items-center justify-between px-5 py-3">
+      <div className="mx-auto flex max-w-[520px] md:max-w-4xl lg:max-w-6xl items-center justify-between px-5 py-3">
         <Link href="/" className="font-serif text-xl tracking-tight text-cocoa">
           TeaYammi
         </Link>

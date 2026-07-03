@@ -61,13 +61,13 @@ export function Carousel({ items, onOpen, intervalMs = 4000 }: Props) {
   return (
     <section aria-label="Nos créations" className="relative">
       <div
-        className="relative mx-auto w-full max-w-[520px] px-5"
+        className="relative mx-auto w-full max-w-[520px] md:max-w-[580px] lg:max-w-[640px] px-5"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
         {/* Image stage */}
         <div
-          className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] bg-cocoa/5 shadow-warm"
+          className="cursor-pointer group relative aspect-[4/5] w-full overflow-hidden rounded-[28px] bg-cocoa/5 shadow-warm"
           onTouchStart={(e) => {
             setPaused(true);
             const t = e.touches[0];
@@ -81,19 +81,11 @@ export function Carousel({ items, onOpen, intervalMs = 4000 }: Props) {
             const t = e.changedTouches[0];
             const dx = t.clientX - start.x;
             const dy = t.clientY - start.y;
-            const dt = Date.now() - start.t;
-            // Tap → open
-            if (Math.abs(dx) < 8 && Math.abs(dy) < 8 && dt < 250) {
-              onOpen(index);
-              return;
-            }
             if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
               dx < 0 ? next() : prev();
             }
           }}
-          onClick={(e) => {
-            // Desktop click (touch handled above)
-            if ((e as unknown as { pointerType?: string }).pointerType === "touch") return;
+          onClick={() => {
             onOpen(index);
           }}
           role="button"
@@ -117,7 +109,7 @@ export function Carousel({ items, onOpen, intervalMs = 4000 }: Props) {
               animate="center"
               exit="exit"
               transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-              className="absolute inset-0 h-full w-full select-none object-cover"
+              className="absolute inset-0 h-full w-full select-none object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           </AnimatePresence>
 
