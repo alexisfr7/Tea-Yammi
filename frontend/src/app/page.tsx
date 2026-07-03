@@ -4,13 +4,11 @@ import { useEffect, useState, useRef } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { MapPin, Phone, Clock } from "lucide-react";
 import { Carousel } from "@/components/ui/Carousel";
-import { Lightbox } from "@/components/ui/Lightbox";
 import { Reveal } from "@/components/ui/Reveal";
 import { gallery as fallbackGallery, getOpenStatus, openingHours as fallbackHours } from "@/lib/site-data";
 import { getGallery, getStatus } from "@/lib/api";
 
 export default function HomePage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [gallery, setGallery] = useState(fallbackGallery);
   const [status, setStatus] = useState({ open: false, label: "Calcul en cours..." });
   const [hours, setHours] = useState(fallbackHours);
@@ -88,7 +86,7 @@ export default function HomePage() {
 
       {/* Carousel */}
       <Reveal amount={0.15}>
-        <Carousel items={gallery} onOpen={setOpenIndex} />
+        <Carousel items={gallery} onOpen={() => {}} />
       </Reveal>
 
       {/* Thumbnails / mosaïque */}
@@ -101,10 +99,8 @@ export default function HomePage() {
         </Reveal>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
           {gallery.map((g, i) => (
-            <motion.button
+            <motion.div
               key={g.src + i}
-              onClick={() => setOpenIndex(i)}
-              whileTap={{ scale: 0.97 }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2, margin: "0px 0px -8% 0px" }}
@@ -115,7 +111,6 @@ export default function HomePage() {
               }}
               style={{ willChange: "transform, opacity" }}
               className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-muted"
-              aria-label={`Ouvrir ${g.title}`}
             >
               <img
                 src={g.src}
@@ -129,7 +124,7 @@ export default function HomePage() {
                   {g.title}
                 </p>
               </div>
-            </motion.button>
+            </motion.div>
           ))}
         </div>
       </section>
@@ -192,17 +187,6 @@ export default function HomePage() {
           </div>
         </Reveal>
       </section>
-
-      <AnimatePresence>
-        {openIndex !== null && (
-          <Lightbox
-            items={gallery}
-            index={openIndex}
-            onIndexChange={setOpenIndex}
-            onClose={() => setOpenIndex(null)}
-          />
-        )}
-      </AnimatePresence>
     </main>
   );
 }
