@@ -69,7 +69,7 @@ export function Lightbox({ items, index, onClose, onIndexChange }: Props) {
 
       {/* Image Section (flex-1 with min-h-0 prevents overflow bugs) */}
       <div 
-        className="relative flex-1 w-full min-h-0 flex items-center justify-center p-4 md:p-12"
+        className="relative flex-1 w-full min-h-0 flex items-center justify-center p-8 md:p-20 lg:p-24"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => {
           const t = e.touches[0];
@@ -100,7 +100,7 @@ export function Lightbox({ items, index, onClose, onIndexChange }: Props) {
             src={item.src}
             alt={item.title}
             draggable={false}
-            className="w-full h-full object-contain rounded-xl drop-shadow-2xl"
+            className="w-full h-full max-h-[60vh] md:max-h-[70vh] max-w-2xl md:max-w-4xl lg:max-w-5xl object-contain rounded-xl drop-shadow-2xl"
           />
         </AnimatePresence>
 
