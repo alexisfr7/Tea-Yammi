@@ -69,7 +69,7 @@ export function Lightbox({ items, index, onClose, onIndexChange }: Props) {
 
       {/* Image Section (flex-1 with min-h-0 prevents overflow bugs) */}
       <div 
-        className="relative flex-1 w-full min-h-0 flex items-center justify-center p-8 md:p-20 lg:p-24"
+        className="relative flex-1 w-full min-h-0 p-8 md:p-24 lg:p-32"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => {
           const t = e.touches[0];
@@ -88,21 +88,27 @@ export function Lightbox({ items, index, onClose, onIndexChange }: Props) {
           if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
         }}
       >
-        <AnimatePresence custom={dir} mode="wait">
-          <motion.img
-            key={index}
-            custom={dir}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            src={item.src}
-            alt={item.title}
-            draggable={false}
-            className="w-full h-full max-h-[60vh] md:max-h-[70vh] max-w-2xl md:max-w-4xl lg:max-w-5xl object-contain rounded-xl drop-shadow-2xl"
-          />
-        </AnimatePresence>
+        <div className="relative w-full h-full flex items-center justify-center">
+          <AnimatePresence custom={dir} mode="wait">
+            <motion.div
+              key={index}
+              custom={dir}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              <img
+                src={item.src}
+                alt={item.title}
+                draggable={false}
+                className="max-h-full max-w-full object-contain rounded-xl drop-shadow-2xl"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
         {/* Nav Buttons */}
         <button
